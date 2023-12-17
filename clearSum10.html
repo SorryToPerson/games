@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+            background: #8b999f;
+            font-family: "Helvetica Neue", Helvetica, Arial;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            gap: 30px;
+            height: 80px;
+            line-height: 80px;
+        }
+        .header-reset{
+            margin: 0 30px;
+        }
+
+        .container {
+            padding: 10px;
+            background: #be7e39;
+            border: 2px solid #4b3115;
+            border-radius: 10px;
+        }
+
+        .container-body {
+            border-radius: 8px;
+            position: relative;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(10, 20px);
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+            border: 2px solid #1c4024;
+            background: #397c54;
+        }
+
+    </style>
+</head>
+<body>
+<div class="header">
+    <button class="header-reset">重置</button>
+    <div class="header-show">
+        当前智商：<span class="count">0</span>
+    </div>
+</div>
+<div class="container">
+    <div class="container-body">
+    </div>
+</div>
+
+<script>
+    document.addEventListener('touchmove', function (event) {
+        event.preventDefault(); // 阻止默认的滑动行为
+    }, {passive: false});
+
+    const containerBody = document.querySelector((".container-body"))
+    const resetBtn = document.querySelector((".header-reset"))
+    const countDom = document.querySelector(".count")
+    let activeArr = [] // 被选中的方块
+    let position = { // 根坐标
+        x: 0,
+        y: 0
+    }
+
+    // 比较两个元素是否重合
+    function areElementsOverlapping(elem1, elem2) {
+        const rect1 = elem1.getBoundingClientRect();
+        const rect2 = elem2.getBoundingClientRect();
+        return !(
+            rect1.right < rect2.left ||
+            rect1.left > rect2.right ||
+            rect1.bottom < rect2.top ||
+            rect1.top > rect2.bottom
+        );
+    }
+    
+    // 生成初始化页面
+    function init() {
+        const arr = []
+        activeArr = []
+        countDom.innerHTML = "0"
+        position = {
+            x: 0,
+            y: 0
+        }
+        document.querySelectorAll(".container-body-item")?.forEach((item) => {
+            containerBody.removeChild(item)
+        })
+        // 生成100个随机数 这些数两两相加的和为10
+        for (let i = 1; i <= 160; i++) {
+            const num = Math.floor(Math.random() * (9 - 1 + 1)) + 1
+            // arr.push(num, 10 - num)
+            arr.push(num)
+        }
+
+
+        // 打乱数组
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1)); // 生成[0, i]之间的随机索引值
+                [array[i], array[j]] = [array[j], array[i]]; // 交换当前位置与随机位置上的元素
+            }
+        }
+
+        shuffleArray(arr);
+
+        // 添加元素
+        arr.forEach(((e) => {
+            const item = document.createElement("div")
+            item.className = "container-body-item"
+            item.style.height = "20px",
+                item.style.width = "20px",
+                item.style.lineHeight = "20px",
+                item.style.textAlign = "center",
+                item.style.fontSize = "14px",
+                item.style.background = "#fff",
+                item.style.border = "1px solid black",
+                item.innerText = e
+            containerBody.appendChild(item)
+        }))
+        
+    }
+    // 初始化页面
+    init()
+
+    resetBtn.addEventListener("click",()=>{
+        init()
+    })
+    
+    containerBody.addEventListener("touchstart", (e) => {
+        const mask = document.querySelector(".mask")
+        if (mask) return
+        const item = document.createElement("div")
+        item.className = "mask"
+        item.style.height = '0px'
+        item.style.width = '0px'
+        item.style.position = `absolute`
+        item.style.backgroundColor = 'rgba(0, 0, 0, 0.2)'
+        item.style.border = `2px solid #fff`
+        item.style.top = `${e.touches[0].clientY - containerBody.offsetTop}px`
+        item.style.left = `${e.touches[0].clientX}px`
+        position = {
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY
+        }
+        containerBody.appendChild(item)
+    })
+
+    containerBody.addEventListener("touchmove", (e) => {
+        const mask = document.querySelector(".mask")
+        const width = e.touches[0].clientX - position.x
+        const height = e.touches[0].clientY - position.y
+        // 根据手指滑动方向调整定位
+        if (width < 0 && height < 0) { // 在左上角
+            mask.style.top = `${e.touches[0].clientY - containerBody.offsetTop}px`
+            mask.style.left = `${e.touches[0].clientX}px`
+        } else if (height < 0 && width >= 0) { // 在右上角
+            mask.style.top = `${position.y + height - containerBody.offsetTop}px`
+        } else if (height >= 0 && width < 0) { // 在左下角
+            mask.style.left = `${position.x + width}px`
+        }
+
+        // 默认往右下角滑动
+        mask.style.width = `${Math.abs(width)}px`
+        mask.style.height = `${Math.abs(height)}px`
+        
+        activeArr = []
+        document.querySelectorAll(".container-body-item").forEach((item) => {
+            item.style.background = "rgb(255, 255, 255)"
+            item.style.color = "black"
+            // 排除透明跟背景色已经为蓝色的干扰
+            if (areElementsOverlapping(item, mask) && item.style.backgroundColor !== "rgb(136, 221, 255)" && item.style.opacity !== "0") {
+                activeArr.push(item)
+                item.style.backgroundColor = "rgb(136, 221, 255)"
+                item.style.color = "rgb(255, 255, 255)"
+                item.style.fontSize = "16px",
+                    item.style.fontWeight = "700"
+            }
+        })
+    })
+
+
+    containerBody.addEventListener("touchend", () => {
+        const mask = document.querySelector(".mask")
+        containerBody.removeChild(mask)
+
+        let num = 0
+        activeArr.forEach((item) => {
+            num += +item.innerText
+        })
+        if (num === 10) {
+            activeArr.forEach((item) => {
+                item.style.opacity = "0"
+            })
+            countDom.innerText = +countDom.innerText + activeArr.length
+        }
+        activeArr = []
+        document.querySelectorAll(".container-body-item").forEach((item) => {
+            item.style.background = "rgb(255, 255, 255)"
+            item.style.color = "black"
+            item.style.fontSize = "14px"
+            item.style.fontWeight = "400"
+        })
+    })
+
+</script>
+</body>
+</html>
