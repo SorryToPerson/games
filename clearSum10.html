@@ -22,17 +22,20 @@
             align-items: center;
             text-align: center;
         }
-        .header-score{
+
+        .header-score {
             width: 100%;
             display: flex;
             justify-content: space-around;
         }
-        .header-desc{
+
+        .header-desc {
             font-size: 12px;
             padding: 10px;
             text-align: left;
         }
-        .desc-title{
+
+        .desc-title {
             font-size: 14px;
             font-weight: bold;
         }
@@ -65,13 +68,14 @@
     <div class="header-desc">
        <span class="desc-title">
            游戏规则：
-       </span>       
-        <br />
+       </span>
+        <br/>
         手指滑动框选数字，框选的数字之和等于10，就会消除相应的方块。
         消除一个方块，得一分
     </div>
     <div class="header-score">
         <button class="header-score--reset">重置</button>
+        <button class="header-score--shuffle">洗牌</button>
         <div class="header-score--show">
             分数：<span class="count">0</span>
         </div>
@@ -89,11 +93,21 @@
 
     const containerBody = document.querySelector((".container-body"))
     const resetBtn = document.querySelector((".header-score--reset"))
+    const shuffleBtn = document.querySelector((".header-score--shuffle"))
     const countDom = document.querySelector(".count")
     let activeArr = [] // 被选中的方块
     let position = { // 根坐标
         x: 0,
         y: 0
+    }
+
+    // 打乱数组
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1)); // 生成[0, i]之间的随机索引值
+            [array[i], array[j]] = [array[j], array[i]]; // 交换当前位置与随机位置上的元素
+        }
+        return array
     }
 
     // 比较两个元素是否重合
@@ -107,7 +121,7 @@
             rect1.top > rect2.bottom
         );
     }
-    
+
     // 生成初始化页面
     function init() {
         const arr = []
@@ -120,7 +134,7 @@
         document.querySelectorAll(".container-body-item")?.forEach((item) => {
             containerBody.removeChild(item)
         })
-        
+
         // 生成随机数
         for (let i = 1; i <= 120; i++) {
             const num = Math.floor(Math.random() * (6 - 1 + 1)) + 1
@@ -132,18 +146,10 @@
             arr.push(num)
         }
 
-        // 打乱数组
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1)); // 生成[0, i]之间的随机索引值
-                [array[i], array[j]] = [array[j], array[i]]; // 交换当前位置与随机位置上的元素
-            }
-        }
-
-        shuffleArray(arr);
+        const newArr = shuffleArray(arr);
 
         // 添加元素
-        arr.forEach(((e) => {
+        newArr.forEach(((e) => {
             const item = document.createElement("div")
             item.className = "container-body-item"
             item.style.height = "20px",
@@ -156,15 +162,27 @@
                 item.innerText = e
             containerBody.appendChild(item)
         }))
-        
+
     }
+
     // 初始化页面
     init()
 
-    resetBtn.addEventListener("click",()=>{
+    resetBtn.addEventListener("click", () => {
         init()
     })
-    
+    shuffleBtn.addEventListener("click", () => {
+        const list = []
+        document.querySelectorAll(".container-body-item")?.forEach((item) => {
+            list.push(item)
+            containerBody.removeChild(item)
+        })
+        const newList = shuffleArray(list)
+        newList?.forEach((item) => {
+            containerBody.appendChild(item)
+        })
+    })
+
     containerBody.addEventListener("touchstart", (e) => {
         const mask = document.querySelector(".mask")
         if (mask) return
@@ -201,7 +219,7 @@
         // 默认往右下角滑动
         mask.style.width = `${Math.abs(width)}px`
         mask.style.height = `${Math.abs(height)}px`
-        
+
         activeArr = []
         document.querySelectorAll(".container-body-item").forEach((item) => {
             item.style.background = "rgb(255, 255, 255)"
@@ -216,7 +234,6 @@
             }
         })
     })
-
 
     containerBody.addEventListener("touchend", () => {
         const mask = document.querySelector(".mask")
