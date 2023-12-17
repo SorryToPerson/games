@@ -15,15 +15,26 @@
         }
 
         .header {
+            height: 110px;
             display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
             text-align: center;
-            gap: 30px;
-            height: 80px;
-            line-height: 80px;
         }
-        .header-reset{
-            margin: 0 30px;
+        .header-score{
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+        .header-desc{
+            font-size: 12px;
+            padding: 10px;
+            text-align: left;
+        }
+        .desc-title{
+            font-size: 14px;
+            font-weight: bold;
         }
 
         .container {
@@ -51,9 +62,19 @@
 </head>
 <body>
 <div class="header">
-    <button class="header-reset">重置</button>
-    <div class="header-show">
-        当前智商：<span class="count">0</span>
+    <div class="header-desc">
+       <span class="desc-title">
+           游戏规则：
+       </span>       
+        <br />
+        手指滑动框选数字，框选的数字之和等于10，就会消除相应的方块。
+        消除一个方块，得一分
+    </div>
+    <div class="header-score">
+        <button class="header-score--reset">重置</button>
+        <div class="header-score--show">
+            分数：<span class="count">0</span>
+        </div>
     </div>
 </div>
 <div class="container">
@@ -67,7 +88,7 @@
     }, {passive: false});
 
     const containerBody = document.querySelector((".container-body"))
-    const resetBtn = document.querySelector((".header-reset"))
+    const resetBtn = document.querySelector((".header-score--reset"))
     const countDom = document.querySelector(".count")
     let activeArr = [] // 被选中的方块
     let position = { // 根坐标
@@ -99,13 +120,17 @@
         document.querySelectorAll(".container-body-item")?.forEach((item) => {
             containerBody.removeChild(item)
         })
-        // 生成100个随机数 这些数两两相加的和为10
-        for (let i = 1; i <= 160; i++) {
-            const num = Math.floor(Math.random() * (9 - 1 + 1)) + 1
-            // arr.push(num, 10 - num)
+        
+        // 生成随机数
+        for (let i = 1; i <= 120; i++) {
+            const num = Math.floor(Math.random() * (6 - 1 + 1)) + 1
             arr.push(num)
         }
 
+        for (let i = 1; i <= 40; i++) {
+            const num = Math.floor(Math.random() * (9 - 7 + 1)) + 7
+            arr.push(num)
+        }
 
         // 打乱数组
         function shuffleArray(array) {
