@@ -14,11 +14,15 @@
             font-family: "Helvetica Neue", Helvetica, Arial;
         }
 
+        button {
+            font-size: 12px;
+            padding: 2px;
+        }
+
         .header {
             height: 110px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             text-align: center;
         }
@@ -27,6 +31,17 @@
             width: 100%;
             display: flex;
             justify-content: space-around;
+        }
+
+        .header-score--reset {
+            display: flex;
+            justify-content: space-around;
+            gap: 8px
+        }
+
+        .header-score--show {
+            width: 80px;
+            text-align: left;
         }
 
         .header-desc {
@@ -74,10 +89,16 @@
         消除一个方块，得一分
     </div>
     <div class="header-score">
-        <button class="header-score--reset">重置</button>
-        <button class="header-score--shuffle">洗牌</button>
+        <div class="header-score--reset">
+            <span>重置:</span>
+            <button class="reset-simple">简单</button>
+            <button class="reset-medium">中等</button>
+            <button class="reset-hard">困难</button>
+            <button class="reset-random">随机</button>
+            <button class="reset-shuffle">洗牌</button>
+        </div>
         <div class="header-score--show">
-            分数：<span class="count">0</span>
+            分数:<span class="count">0</span>
         </div>
     </div>
 </div>
@@ -92,8 +113,11 @@
     }, {passive: false});
 
     const containerBody = document.querySelector((".container-body"))
-    const resetBtn = document.querySelector((".header-score--reset"))
-    const shuffleBtn = document.querySelector((".header-score--shuffle"))
+    const resetSimpleBtn = document.querySelector((".reset-simple"))
+    const resetMediumBtn = document.querySelector((".reset-medium"))
+    const resetHardBtn = document.querySelector((".reset-hard"))
+    const resetRandomBtn = document.querySelector((".reset-random"))
+    const shuffleBtn = document.querySelector((".reset-shuffle"))
     const countDom = document.querySelector(".count")
     let activeArr = [] // 被选中的方块
     let position = { // 根坐标
@@ -123,7 +147,7 @@
     }
 
     // 生成初始化页面
-    function init() {
+    function init(type = "random") {
         const arr = []
         activeArr = []
         countDom.innerHTML = "0"
@@ -135,23 +159,61 @@
             containerBody.removeChild(item)
         })
 
-        // 生成随机数 1-5 120个
-        for (let i = 1; i <= 120; i++) {
-            const num = Math.floor(Math.random() * (5 - 1 + 1)) + 1
-            arr.push(num)
+        switch (type) {
+            case "random":
+                // 生成随机数 1-9 160个
+                for (let i = 1; i <= 160; i++) {
+                    const num = Math.floor(Math.random() * (9 - 1 + 1)) + 1
+                    arr.push(num)
+                }
+                break;
+            case "simple":
+                // 生成随机数 1-5 120个
+                for (let i = 1; i <= 120; i++) {
+                    const num = Math.floor(Math.random() * (5 - 1 + 1)) + 1
+                    arr.push(num)
+                }
+
+                // 生成随机数 6-7 20个
+                for (let i = 1; i <= 30; i++) {
+                    const num = Math.floor(Math.random() * (7 - 6 + 1)) + 6
+                    arr.push(num)
+                }
+
+                // 生成随机数 8-9 10个
+                for (let i = 1; i <= 10; i++) {
+                    const num = Math.floor(Math.random() * (9 - 8 + 1)) + 8
+                    arr.push(num)
+                }
+                break;
+            case "medium":
+                // 生成随机数 1-5 120个
+                for (let i = 1; i <= 120; i++) {
+                    const num = Math.floor(Math.random() * (5 - 1 + 1)) + 1
+                    arr.push(num)
+                }
+
+                // 生成随机数 6-7 20个
+                for (let i = 1; i <= 40; i++) {
+                    const num = Math.floor(Math.random() * (9 - 6 + 1)) + 6
+                    arr.push(num)
+                }
+                break;
+
+            case "hard":
+                // 生成随机数 1-5 120个
+                for (let i = 1; i <= 110; i++) {
+                    const num = Math.floor(Math.random() * (6 - 1 + 1)) + 1
+                    arr.push(num)
+                }
+                // 生成随机数 6-7 20个
+                for (let i = 1; i <= 50; i++) {
+                    const num = Math.floor(Math.random() * (9 - 7 + 1)) + 7
+                    arr.push(num)
+                }
+                break;
         }
 
-        // 生成随机数 6-7 20个
-        for (let i = 1; i <= 20; i++) {
-            const num = Math.floor(Math.random() * (7 - 6 + 1)) + 1
-            arr.push(num)
-        }
-
-        // 生成随机数 8-9 10个
-        for (let i = 1; i <= 20; i++) {
-            const num = Math.floor(Math.random() * (9 - 8 + 1)) + 7
-            arr.push(num)
-        }
 
         const newArr = shuffleArray(arr);
 
@@ -159,24 +221,33 @@
         newArr.forEach(((e) => {
             const item = document.createElement("div")
             item.className = "container-body-item"
-            item.style.height = "20px",
-                item.style.width = "20px",
-                item.style.lineHeight = "20px",
-                item.style.textAlign = "center",
-                item.style.fontSize = "14px",
-                item.style.background = "#fff",
-                item.style.border = "1px solid black",
-                item.innerText = e
+            item.style.height = "20px"
+            item.style.width = "20px"
+            item.style.lineHeight = "20px"
+            item.style.textAlign = "center"
+            item.style.fontSize = "14px"
+            item.style.background = "#fff"
+            item.style.border = "1px solid black"
+            item.innerText = e
             containerBody.appendChild(item)
         }))
 
     }
 
     // 初始化页面
-    init()
+    init("random")
 
-    resetBtn.addEventListener("click", () => {
-        init()
+    resetSimpleBtn.addEventListener("click", () => {
+        init("simple")
+    })
+    resetMediumBtn.addEventListener("click", () => {
+        init("medium")
+    })
+    resetHardBtn.addEventListener("click", () => {
+        init("hard")
+    })
+    resetRandomBtn.addEventListener("click", () => {
+        init("random")
     })
     shuffleBtn.addEventListener("click", () => {
         const list = []
@@ -242,7 +313,8 @@
         })
     })
 
-    containerBody.addEventListener("touchend", () => {
+    containerBody.addEventListener("touchend", (e) => {
+        console.log(e)
         const mask = document.querySelector(".mask")
         containerBody.removeChild(mask)
 
@@ -255,6 +327,30 @@
                 item.style.opacity = "0"
             })
             countDom.innerText = +countDom.innerText + activeArr.length
+
+            const item = document.createElement("div")
+            item.className = "combo"
+            item.style.height = "30px"
+            item.style.width = "30px"
+            item.style.borderRadius = "15px"
+            item.style.lineHeight = "30px"
+            item.style.textAlign = "center"
+            item.style.fontSize = "14px"
+            item.style.color = "#e85949"
+            item.style.background = "#fff"
+            item.style.transform = "translate(-50%,-50%)"
+            item.innerText = '10'
+            item.style.position = `absolute`
+            console.log(e.changedTouches[0].clientY, position.y)
+            console.log(e.changedTouches[0].clientX, position.x)
+            const top = (e.changedTouches[0].clientY + position.y) / 2
+            const left = (e.changedTouches[0].clientX + position.x) / 2
+            item.style.top = `${top - containerBody.offsetTop}px`
+            item.style.left = `${left}px`
+            containerBody.appendChild(item)
+            // setTimeout(()=>{
+            //     containerBody.removeChild(item)
+            // }, 500)
         }
         activeArr = []
         document.querySelectorAll(".container-body-item").forEach((item) => {
