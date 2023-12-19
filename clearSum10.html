@@ -349,9 +349,9 @@
             item.style.top = `${top - containerBody.offsetTop}px`
             item.style.left = `${left}px`
             containerBody.appendChild(item)
-            // setTimeout(()=>{
-            //     containerBody.removeChild(item)
-            // }, 500)
+            setTimeout(()=>{
+                containerBody.removeChild(item)
+            }, 500)
         }
         activeArr = []
         document.querySelectorAll(".container-body-item").forEach((item) => {
