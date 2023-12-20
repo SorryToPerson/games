@@ -87,11 +87,6 @@
   </head>
   <body>
     <div class="header">
-      <audio
-        preload="auto"
-        class="sound"
-        src="https://img.tukuppt.com/newpreview_music/09/00/62/5c893bc792bbf37441.mp3"
-      ></audio>
       <div class="header-desc">
         <span class="desc-title"> 游戏规则： </span>
         <br />
@@ -123,7 +118,6 @@
         { passive: false },
       );
 
-      const soundAudioDom = document.querySelector('.sound');
       const containerBody = document.querySelector('.container-body');
       const resetSimpleBtn = document.querySelector('.reset-simple');
       const resetMediumBtn = document.querySelector('.reset-medium');
@@ -342,7 +336,13 @@
             item.style.opacity = '0';
           });
           countDom.innerText = +countDom.innerText + activeArr.length;
-          soundAudioDom.play();
+          const audio = new Audio(
+            'https://img.tukuppt.com/newpreview_music/09/00/36/5c891d534f9323768.mp3',
+          );
+          // https://img.tukuppt.com/newpreview_music/09/00/62/5c893bc792bbf37441.mp3
+          // https://img.tukuppt.com/newpreview_music/09/00/63/5c893bcc1545544917.mp3
+          // https://img.tukuppt.com/newpreview_music/09/00/36/5c891d534f9323768.mp3
+          audio.play();
           const item = document.createElement('div');
           item.className = 'combo';
           item.style.height = '30px';
