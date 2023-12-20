@@ -1,367 +1,380 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
     <style>
-        html, body {
-            margin: 0;
-            height: 100%;
-            background: #8b999f;
-            font-family: "Helvetica Neue", Helvetica, Arial;
-        }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #8b999f;
+        font-family: 'Helvetica Neue', Helvetica, Arial;
+      }
 
-        button {
-            font-size: 12px;
-            padding: 2px;
-        }
+      button {
+        font-size: 12px;
+        padding: 2px;
+      }
 
-        .active,
-        button:active {
-            background: aquamarine;
-        }
-        
-        .header {
-            height: 110px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
+      .active,
+      button:active {
+        background: aquamarine;
+      }
 
-        .header-score {
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-        }
+      .header {
+        height: 110px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
 
-        .header-score--reset {
-            display: flex;
-            justify-content: space-around;
-            gap: 8px
-        }
+      .header-score {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+      }
 
-        .header-score--show {
-            width: 80px;
-            text-align: left;
-        }
+      .header-score--reset {
+        display: flex;
+        justify-content: space-around;
+        gap: 8px;
+      }
 
-        .header-desc {
-            font-size: 12px;
-            padding: 10px;
-            text-align: left;
-        }
+      .header-score--show {
+        width: 80px;
+        text-align: left;
+      }
 
-        .desc-title {
-            font-size: 14px;
-            font-weight: bold;
-        }
+      .header-desc {
+        font-size: 12px;
+        padding: 10px;
+        text-align: left;
+      }
 
-        .container {
-            padding: 10px;
-            background: #be7e39;
-            border: 2px solid #4b3115;
-            border-radius: 10px;
-        }
+      .desc-title {
+        font-size: 14px;
+        font-weight: bold;
+      }
 
-        .container-body {
-            border-radius: 8px;
-            position: relative;
-            padding: 10px;
-            display: grid;
-            grid-template-columns: repeat(10, 20px);
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            text-align: center;
-            border: 2px solid #1c4024;
-            background: #397c54;
-        }
+      .container {
+        padding: 10px;
+        background: #be7e39;
+        border: 2px solid #4b3115;
+        border-radius: 10px;
+      }
 
+      .container-body {
+        border-radius: 8px;
+        position: relative;
+        padding: 10px;
+        display: grid;
+        grid-template-columns: repeat(10, 20px);
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+        border: 2px solid #1c4024;
+        background: #397c54;
+      }
     </style>
-</head>
-<body>
-<div class="header">
-    <div class="header-desc">
-       <span class="desc-title">
-           游戏规则：
-       </span>
-        <br/>
+  </head>
+  <body>
+    <div class="header">
+      <audio
+        preload="auto"
+        class="sound"
+        src="https://img.tukuppt.com/newpreview_music/09/00/62/5c893bc792bbf37441.mp3"
+      ></audio>
+      <div class="header-desc">
+        <span class="desc-title"> 游戏规则： </span>
+        <br />
         手指滑动框选数字，框选的数字之和等于10，就会消除相应的方块。
         消除一个方块，得一分
-    </div>
-    <div class="header-score">
+      </div>
+      <div class="header-score">
         <div class="header-score--reset">
-            <span>重置:</span>
-            <button class="reset-simple">简单</button>
-            <button class="reset-medium">中等</button>
-            <button class="reset-hard">困难</button>
-            <button class="reset-random active">随机</button>
-            <button class="reset-shuffle">洗牌</button>
+          <span>重置:</span>
+          <button class="reset-simple">简单</button>
+          <button class="reset-medium">中等</button>
+          <button class="reset-hard">困难</button>
+          <button class="reset-random active">随机</button>
+          <button class="reset-shuffle">洗牌</button>
         </div>
-        <div class="header-score--show">
-            分数:<span class="count">0</span>
-        </div>
+        <div class="header-score--show">分数:<span class="count">0</span></div>
+      </div>
     </div>
-</div>
-<div class="container">
-    <div class="container-body">
+    <div class="container">
+      <div class="container-body"></div>
     </div>
-</div>
 
-<script>
-    document.addEventListener('touchmove', function (event) {
-        event.preventDefault(); // 阻止默认的滑动行为
-    }, {passive: false});
+    <script>
+      document.addEventListener(
+        'touchmove',
+        function (event) {
+          event.preventDefault(); // 阻止默认的滑动行为
+        },
+        { passive: false },
+      );
 
-    const containerBody = document.querySelector((".container-body"))
-    const resetSimpleBtn = document.querySelector((".reset-simple"))
-    const resetMediumBtn = document.querySelector((".reset-medium"))
-    const resetHardBtn = document.querySelector((".reset-hard"))
-    const resetRandomBtn = document.querySelector((".reset-random"))
-    const shuffleBtn = document.querySelector((".reset-shuffle"))
-    const countDom = document.querySelector(".count")
-    let activeArr = [] // 被选中的方块
-    let position = { // 根坐标
+      const soundAudioDom = document.querySelector('.sound');
+      const containerBody = document.querySelector('.container-body');
+      const resetSimpleBtn = document.querySelector('.reset-simple');
+      const resetMediumBtn = document.querySelector('.reset-medium');
+      const resetHardBtn = document.querySelector('.reset-hard');
+      const resetRandomBtn = document.querySelector('.reset-random');
+      const shuffleBtn = document.querySelector('.reset-shuffle');
+      const countDom = document.querySelector('.count');
+      let activeArr = []; // 被选中的方块
+      let position = {
+        // 根坐标
         x: 0,
-        y: 0
-    }
+        y: 0,
+      };
 
-    // 打乱数组
-    function shuffleArray(array) {
+      // 打乱数组
+      function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1)); // 生成[0, i]之间的随机索引值
-            [array[i], array[j]] = [array[j], array[i]]; // 交换当前位置与随机位置上的元素
+          const j = Math.floor(Math.random() * (i + 1)); // 生成[0, i]之间的随机索引值
+          [array[i], array[j]] = [array[j], array[i]]; // 交换当前位置与随机位置上的元素
         }
-        return array
-    }
+        return array;
+      }
 
-    // 比较两个元素是否重合
-    function areElementsOverlapping(elem1, elem2) {
+      // 比较两个元素是否重合
+      function areElementsOverlapping(elem1, elem2) {
         const rect1 = elem1.getBoundingClientRect();
         const rect2 = elem2.getBoundingClientRect();
         return !(
-            rect1.right < rect2.left ||
-            rect1.left > rect2.right ||
-            rect1.bottom < rect2.top ||
-            rect1.top > rect2.bottom
+          rect1.right < rect2.left ||
+          rect1.left > rect2.right ||
+          rect1.bottom < rect2.top ||
+          rect1.top > rect2.bottom
         );
-    }
+      }
 
-    // 生成初始化页面
-    function init(type = "random") {
-        const arr = []
-        activeArr = []
-        countDom.innerHTML = "0"
+      // 生成初始化页面
+      function init(type = 'random') {
+        const arr = [];
+        activeArr = [];
+        countDom.innerHTML = '0';
         position = {
-            x: 0,
-            y: 0
-        }
-        document.querySelectorAll(".container-body-item")?.forEach((item) => {
-            containerBody.removeChild(item)
-        })
+          x: 0,
+          y: 0,
+        };
+        document.querySelectorAll('.container-body-item')?.forEach((item) => {
+          containerBody.removeChild(item);
+        });
 
         switch (type) {
-            case "random":
-                for (let i = 1; i <= 160; i++) {
-                    const num = Math.floor(Math.random() * (9 - 1 + 1)) + 1
-                    arr.push(num)
-                }
-                break;
-            case "simple":
-                for (let i = 1; i <= 120; i++) {
-                    const num = Math.floor(Math.random() * (5 - 1 + 1)) + 1
-                    arr.push(num)
-                }
-                for (let i = 1; i <= 30; i++) {
-                    const num = Math.floor(Math.random() * (7 - 6 + 1)) + 6
-                    arr.push(num)
-                }
-                for (let i = 1; i <= 10; i++) {
-                    const num = Math.floor(Math.random() * (9 - 8 + 1)) + 8
-                    arr.push(num)
-                }
-                break;
-            case "medium":
-                for (let i = 1; i <= 120; i++) {
-                    const num = Math.floor(Math.random() * (5 - 1 + 1)) + 1
-                    arr.push(num)
-                }
-                for (let i = 1; i <= 40; i++) {
-                    const num = Math.floor(Math.random() * (9 - 6 + 1)) + 6
-                    arr.push(num)
-                }
-                break;
-            case "hard":
-                for (let i = 1; i <= 100; i++) {
-                    const num = Math.floor(Math.random() * (6 - 1 + 1)) + 1
-                    arr.push(num)
-                }
-                for (let i = 1; i <= 60; i++) {
-                    const num = Math.floor(Math.random() * (9 - 7 + 1)) + 7
-                    arr.push(num)
-                }
-                break;
+          case 'random':
+            for (let i = 1; i <= 160; i++) {
+              const num = Math.floor(Math.random() * (9 - 1 + 1)) + 1;
+              arr.push(num);
+            }
+            break;
+          case 'simple':
+            for (let i = 1; i <= 120; i++) {
+              const num = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+              arr.push(num);
+            }
+            for (let i = 1; i <= 30; i++) {
+              const num = Math.floor(Math.random() * (7 - 6 + 1)) + 6;
+              arr.push(num);
+            }
+            for (let i = 1; i <= 10; i++) {
+              const num = Math.floor(Math.random() * (9 - 8 + 1)) + 8;
+              arr.push(num);
+            }
+            break;
+          case 'medium':
+            for (let i = 1; i <= 120; i++) {
+              const num = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+              arr.push(num);
+            }
+            for (let i = 1; i <= 40; i++) {
+              const num = Math.floor(Math.random() * (9 - 6 + 1)) + 6;
+              arr.push(num);
+            }
+            break;
+          case 'hard':
+            for (let i = 1; i <= 100; i++) {
+              const num = Math.floor(Math.random() * (6 - 1 + 1)) + 1;
+              arr.push(num);
+            }
+            for (let i = 1; i <= 60; i++) {
+              const num = Math.floor(Math.random() * (9 - 7 + 1)) + 7;
+              arr.push(num);
+            }
+            break;
         }
-
 
         const newArr = shuffleArray(arr);
 
         // 添加元素
-        newArr.forEach(((e) => {
-            const item = document.createElement("div")
-            item.className = "container-body-item"
-            item.style.height = "20px"
-            item.style.width = "20px"
-            item.style.lineHeight = "20px"
-            item.style.textAlign = "center"
-            item.style.fontSize = "14px"
-            item.style.background = "#fff"
-            item.style.border = "1px solid black"
-            item.innerText = e
-            containerBody.appendChild(item)
-        }))
+        newArr.forEach((e) => {
+          const item = document.createElement('div');
+          item.className = 'container-body-item';
+          item.style.height = '20px';
+          item.style.width = '20px';
+          item.style.lineHeight = '20px';
+          item.style.textAlign = 'center';
+          item.style.fontSize = '14px';
+          item.style.background = '#fff';
+          item.style.border = '1px solid black';
+          item.innerText = e;
+          containerBody.appendChild(item);
+        });
+      }
 
-    }
+      // 初始化页面
+      init('random');
 
-    // 初始化页面
-    init("random")
-
-    resetSimpleBtn.addEventListener("click", () => {
-        document.querySelector(".active").classList.remove("active")
-        resetSimpleBtn.classList.add("active")
-        init("simple")
-    })
-    resetMediumBtn.addEventListener("click", () => {
-        document.querySelector(".active").classList.remove("active")
-        resetMediumBtn.classList.add("active")
-        init("medium")
-    })
-    resetHardBtn.addEventListener("click", () => {
-        document.querySelector(".active").classList.remove("active")
-        resetHardBtn.classList.add("active")
-        init("hard")
-    })
-    resetRandomBtn.addEventListener("click", () => {
-        document.querySelector(".active").classList.remove("active")
-        resetRandomBtn.classList.add("active")
-        init("random")
-    })
-    shuffleBtn.addEventListener("click", () => {
-        const list = []
-        document.querySelectorAll(".container-body-item")?.forEach((item) => {
-            list.push(item)
-            containerBody.removeChild(item)
-        })
-        const newList = shuffleArray(list)
+      resetSimpleBtn.addEventListener('click', () => {
+        document.querySelector('.active').classList.remove('active');
+        resetSimpleBtn.classList.add('active');
+        init('simple');
+      });
+      resetMediumBtn.addEventListener('click', () => {
+        document.querySelector('.active').classList.remove('active');
+        resetMediumBtn.classList.add('active');
+        init('medium');
+      });
+      resetHardBtn.addEventListener('click', () => {
+        document.querySelector('.active').classList.remove('active');
+        resetHardBtn.classList.add('active');
+        init('hard');
+      });
+      resetRandomBtn.addEventListener('click', () => {
+        document.querySelector('.active').classList.remove('active');
+        resetRandomBtn.classList.add('active');
+        init('random');
+      });
+      shuffleBtn.addEventListener('click', () => {
+        const list = [];
+        document.querySelectorAll('.container-body-item')?.forEach((item) => {
+          list.push(item);
+          containerBody.removeChild(item);
+        });
+        const newList = shuffleArray(list);
         newList?.forEach((item) => {
-            containerBody.appendChild(item)
-        })
-    })
+          containerBody.appendChild(item);
+        });
+      });
 
-    containerBody.addEventListener("touchstart", (e) => {
-        const mask = document.querySelector(".mask")
-        if (mask) return
-        const item = document.createElement("div")
-        item.className = "mask"
-        item.style.height = '0px'
-        item.style.width = '0px'
-        item.style.position = `absolute`
-        item.style.backgroundColor = 'rgba(0, 0, 0, 0.2)'
-        item.style.border = `2px solid #fff`
-        item.style.top = `${e.touches[0].clientY - containerBody.offsetTop}px`
-        item.style.left = `${e.touches[0].clientX}px`
+      containerBody.addEventListener('touchstart', (e) => {
+        const mask = document.querySelector('.mask');
+        if (mask) return;
+        const item = document.createElement('div');
+        item.className = 'mask';
+        item.style.height = '0px';
+        item.style.width = '0px';
+        item.style.position = `absolute`;
+        item.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+        item.style.border = `2px solid #fff`;
+        item.style.top = `${e.touches[0].clientY - containerBody.offsetTop}px`;
+        item.style.left = `${e.touches[0].clientX}px`;
         position = {
-            x: e.touches[0].clientX,
-            y: e.touches[0].clientY
-        }
-        containerBody.appendChild(item)
-    })
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY,
+        };
+        containerBody.appendChild(item);
+      });
 
-    containerBody.addEventListener("touchmove", (e) => {
-        const mask = document.querySelector(".mask")
-        const width = e.touches[0].clientX - position.x
-        const height = e.touches[0].clientY - position.y
+      containerBody.addEventListener('touchmove', (e) => {
+        const mask = document.querySelector('.mask');
+        const width = e.touches[0].clientX - position.x;
+        const height = e.touches[0].clientY - position.y;
         // 根据手指滑动方向调整定位
-        if (width < 0 && height < 0) { // 在左上角
-            mask.style.top = `${e.touches[0].clientY - containerBody.offsetTop}px`
-            mask.style.left = `${e.touches[0].clientX}px`
-        } else if (height < 0 && width >= 0) { // 在右上角
-            mask.style.top = `${position.y + height - containerBody.offsetTop}px`
-        } else if (height >= 0 && width < 0) { // 在左下角
-            mask.style.left = `${position.x + width}px`
+        if (width < 0 && height < 0) {
+          // 在左上角
+          mask.style.top = `${
+            e.touches[0].clientY - containerBody.offsetTop
+          }px`;
+          mask.style.left = `${e.touches[0].clientX}px`;
+        } else if (height < 0 && width >= 0) {
+          // 在右上角
+          mask.style.top = `${position.y + height - containerBody.offsetTop}px`;
+        } else if (height >= 0 && width < 0) {
+          // 在左下角
+          mask.style.left = `${position.x + width}px`;
         }
 
         // 默认往右下角滑动
-        mask.style.width = `${Math.abs(width)}px`
-        mask.style.height = `${Math.abs(height)}px`
+        mask.style.width = `${Math.abs(width)}px`;
+        mask.style.height = `${Math.abs(height)}px`;
 
-        activeArr = []
-        document.querySelectorAll(".container-body-item").forEach((item) => {
-            item.style.background = "rgb(255, 255, 255)"
-            item.style.color = "black"
-            // 排除透明跟背景色已经为蓝色的干扰
-            if (areElementsOverlapping(item, mask) && item.style.backgroundColor !== "rgb(136, 221, 255)" && item.style.opacity !== "0") {
-                activeArr.push(item)
-                item.style.backgroundColor = "rgb(136, 221, 255)"
-                item.style.color = "rgb(255, 255, 255)"
-                item.style.fontSize = "16px",
-                    item.style.fontWeight = "700"
-            }
-        })
-    })
+        activeArr = [];
+        document.querySelectorAll('.container-body-item').forEach((item) => {
+          item.style.background = 'rgb(255, 255, 255)';
+          item.style.color = 'black';
+          // 排除透明跟背景色已经为蓝色的干扰
+          if (
+            areElementsOverlapping(item, mask) &&
+            item.style.backgroundColor !== 'rgb(136, 221, 255)' &&
+            item.style.opacity !== '0'
+          ) {
+            activeArr.push(item);
+            item.style.backgroundColor = 'rgb(136, 221, 255)';
+            item.style.color = 'rgb(255, 255, 255)';
+            (item.style.fontSize = '16px'), (item.style.fontWeight = '700');
+          }
+        });
+      });
 
-    containerBody.addEventListener("touchend", (e) => {
-        console.log(e)
-        const mask = document.querySelector(".mask")
-        containerBody.removeChild(mask)
+      containerBody.addEventListener('touchend', (e) => {
+        console.log(e);
+        const mask = document.querySelector('.mask');
+        containerBody.removeChild(mask);
 
-        let num = 0
+        let num = 0;
         activeArr.forEach((item) => {
-            num += +item.innerText
-        })
+          num += +item.innerText;
+        });
         if (num === 10) {
-            activeArr.forEach((item) => {
-                item.style.opacity = "0"
-            })
-            countDom.innerText = +countDom.innerText + activeArr.length
-
-            const item = document.createElement("div")
-            item.className = "combo"
-            item.style.height = "30px"
-            item.style.width = "30px"
-            item.style.borderRadius = "15px"
-            item.style.lineHeight = "30px"
-            item.style.textAlign = "center"
-            item.style.fontSize = "14px"
-            item.style.color = "#e85949"
-            item.style.background = "#fff"
-            item.style.transform = "translate(-50%,-50%)"
-            item.innerText = '10'
-            item.style.position = `absolute`
-            console.log(e.changedTouches[0].clientY, position.y)
-            console.log(e.changedTouches[0].clientX, position.x)
-            const top = (e.changedTouches[0].clientY + position.y) / 2
-            const left = (e.changedTouches[0].clientX + position.x) / 2
-            item.style.top = `${top - containerBody.offsetTop}px`
-            item.style.left = `${left}px`
-            containerBody.appendChild(item)
-            setTimeout(()=>{
-                containerBody.removeChild(item)
-            }, 500)
+          activeArr.forEach((item) => {
+            item.style.opacity = '0';
+          });
+          countDom.innerText = +countDom.innerText + activeArr.length;
+          soundAudioDom.play();
+          const item = document.createElement('div');
+          item.className = 'combo';
+          item.style.height = '30px';
+          item.style.width = '30px';
+          item.style.borderRadius = '15px';
+          item.style.lineHeight = '30px';
+          item.style.textAlign = 'center';
+          item.style.fontSize = '14px';
+          item.style.color = '#e85949';
+          item.style.background = '#fff';
+          item.style.transform = 'translate(-50%,-50%)';
+          item.innerText = '10';
+          item.style.position = `absolute`;
+          console.log(e.changedTouches[0].clientY, position.y);
+          console.log(e.changedTouches[0].clientX, position.x);
+          const top = (e.changedTouches[0].clientY + position.y) / 2;
+          const left = (e.changedTouches[0].clientX + position.x) / 2;
+          item.style.top = `${top - containerBody.offsetTop}px`;
+          item.style.left = `${left}px`;
+          containerBody.appendChild(item);
+          setTimeout(() => {
+            containerBody.removeChild(item);
+          }, 500);
         }
-        activeArr = []
-        document.querySelectorAll(".container-body-item").forEach((item) => {
-            item.style.background = "rgb(255, 255, 255)"
-            item.style.color = "black"
-            item.style.fontSize = "14px"
-            item.style.fontWeight = "400"
-        })
-    })
-
-</script>
-</body>
+        activeArr = [];
+        document.querySelectorAll('.container-body-item').forEach((item) => {
+          item.style.background = 'rgb(255, 255, 255)';
+          item.style.color = 'black';
+          item.style.fontSize = '14px';
+          item.style.fontWeight = '400';
+        });
+      });
+    </script>
+  </body>
 </html>
